@@ -157,6 +157,11 @@ final public class DummyToolkit extends Toolkit {
     }
 
     @Override
+    public PlatformImage createPlatformImage(int w, int h, Color c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public void startup(Runnable runnable) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

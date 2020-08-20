@@ -1428,6 +1428,30 @@ public final class QuantumToolkit extends Toolkit {
     }
 
     @Override
+    public PlatformImage createPlatformImage(int w, int h, Color c) {
+        ByteBuffer bytebuf = ByteBuffer.allocate(w * h * 4);
+
+        if (c == null) throw new NullPointerException("Color cannot be null");
+        byte a = (byte) (Math.round(c.getOpacity() * 255));
+        byte r = (byte) (Math.round(c.getRed()     * 255));
+        byte g = (byte) (Math.round(c.getGreen()   * 255));
+        byte b = (byte) (Math.round(c.getBlue()    * 255));
+
+        int len = w*h;
+
+        for(int x = 0; x < len; x++) {
+            bytebuf.put(b);
+            bytebuf.put(g);
+            bytebuf.put(r);
+            bytebuf.put(a);
+        }
+
+        bytebuf.position(0);
+
+        return com.sun.prism.Image.fromByteBgraPreData(bytebuf, w, h);
+    }
+
+    @Override
     public Object renderToImage(ImageRenderingContext p) {
         Object saveImage = p.platformImage;
         final ImageRenderingContext params = p;

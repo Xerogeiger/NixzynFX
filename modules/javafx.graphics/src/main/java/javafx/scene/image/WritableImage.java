@@ -77,6 +77,24 @@ public class WritableImage extends Image {
         super(width, height);
     }
 
+    /**
+     * Constructs an empty image of the specified dimensions and color.
+     * The image will initially be filled with pixels to match the provided color.
+     * Images constructed this way will always be readable and writable
+     * so the corresponding getPixelReader() and getPixelWriter() will
+     * always return valid objects.
+     * The dimensions must both be positive numbers <code>(&gt;&nbsp;0)</code>.
+     * The initial color must not be null
+     *
+     * @param width the desired width of the writable image
+     * @param height the desired height of the desired image
+     * @param initColor the initial color of the image
+     * @throws IllegalArgumentException if either dimension is negative or zero or the color in null.
+     */
+    public WritableImage(@NamedArg("width") int width, @NamedArg("height") int height, @NamedArg("initialColor") Color initColor) {
+        super(width, height, initColor);
+    }
+
     private PixelBuffer<? extends Buffer> pixelBuffer = null;
 
     /**

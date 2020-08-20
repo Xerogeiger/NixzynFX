@@ -612,6 +612,11 @@ public class StubToolkit extends Toolkit {
     }
 
     @Override
+    public PlatformImage createPlatformImage(int w, int h, Color c) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public void waitFor(Task t) {
         throw new UnsupportedOperationException();
     }

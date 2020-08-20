@@ -859,6 +859,8 @@ public abstract class Toolkit {
      * @see Toolkit.getImageAccessor().fromPlatformImage
      */
 
+    public abstract PlatformImage createPlatformImage(int w, int h, Color c);
+
     public abstract Object renderToImage(ImageRenderingContext context);
 
     /**

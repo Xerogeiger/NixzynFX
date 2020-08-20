@@ -22,6 +22,7 @@ org.eclipse.buildship*
 # Ignore IntelliJ files
 .idea/tasks.xml
 .idea/workspace.xml
+.idea/misc.xml
 .idea/inspectionProfiles/**
 .idea/copyright/profiles_settings.xml
 .idea/codeStyles/**

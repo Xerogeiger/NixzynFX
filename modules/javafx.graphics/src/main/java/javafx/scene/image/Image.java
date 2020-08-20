@@ -741,6 +741,26 @@ public class Image {
     }
 
     /**
+     * Package private internal constructor used only by {@link WritableImage}.
+     * The dimensions must both be positive numbers <code>(&gt;&nbsp;0)</code>.
+     * Color must not be null
+     *
+     * @param width the width of the empty image
+     * @param height the height of the empty image
+     * @param color the default color of the image
+     * @throws IllegalArgumentException if either dimension is negative or zero or color is null.
+     */
+    Image(int width, int height, Color color) {
+        this(null, null, width, height, false, false, false);
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("Image dimensions must be positive (w,h > 0)");
+        } else if(color == null) {
+            throw new IllegalArgumentException("Image color must not be null");
+        }
+        initialize(Toolkit.getToolkit().createPlatformImage(width, height, color));
+    }
+
+    /**
      * Package private internal constructor used only by {@code WritableImage}.
      *
      * @param pixelBuffer the {@code PixelBuffer} used to construct this image.
