@@ -704,6 +704,19 @@ public class Image {
     }
 
     /**
+     * Constructs an {@code Image} with content loaded from the specified
+     * input stream and saves the path to it.
+     *
+     * @param is the stream from which to load the image
+     * @param path the stored path for the image
+     * @throws NullPointerException if input stream is null
+     */
+    public Image(@NamedArg("is") InputStream is, @NamedArg("path") String path) {
+        this(path, validateInputStream(is), 0, 0, false, false, false);
+        initialize(null);
+    }
+
+    /**
      * Constructs a new {@code Image} with the specified parameters.
      *
      * @param is the stream from which to load the image
