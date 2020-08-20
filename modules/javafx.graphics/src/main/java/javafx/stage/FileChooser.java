@@ -85,6 +85,10 @@ import com.sun.javafx.tk.Toolkit;
  * @since JavaFX 2.0
  */
 public final class FileChooser {
+
+    public static final ExtensionFilter[] IMAGE_EXTENSION_FILTERS = {new FileChooser.ExtensionFilter("PNG File", "*.png"), new FileChooser.ExtensionFilter("JPG File", "*.jpg"), new FileChooser.ExtensionFilter("BMP File", "*.bmp"), new FileChooser.ExtensionFilter("GIF File", "*.gif"), new FileChooser.ExtensionFilter("JPEG File", "*.jpeg")};
+    public static final ExtensionFilter ANY_IMAGE_EXTENSION_FILTER = new FileChooser.ExtensionFilter("Supported Images", "*.jpg", "*.png", "*.bmp", "*.gif", "*.jpeg");
+
     /**
      * Defines an extension filter, used for filtering which files can be chosen
      * in a FileDialog based on the file name extensions.

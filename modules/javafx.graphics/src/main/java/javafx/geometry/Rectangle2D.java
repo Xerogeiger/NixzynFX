@@ -130,6 +130,16 @@ public class Rectangle2D {
         return contains(p.getX(), p.getY());
     }
 
+    /**
+     * Scales the rectangle 2D but keeps the same ratio {@code Rectangle2D}.
+     *
+     * @param multiplier the scale multiplier to apply
+     * @return new {@code Rectangle2D} with scaled numbers
+     */
+    public Rectangle2D scale(@NamedArg("multiplier") double multiplier) {
+        return new Rectangle2D(this.minX * multiplier, this.minY * multiplier, this.width * multiplier, this.height * multiplier);
+    }
+
    /**
     * Tests if the specified {@code (x, y)} coordinates are inside the boundary
     * of {@code Rectangle2D}.
