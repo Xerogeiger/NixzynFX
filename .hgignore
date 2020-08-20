@@ -61,6 +61,7 @@ DerivedData
 *.opensdf
 *.suo
 *.ipch
+*.iml
 
 # whitelist default files (if they exist)
 !default.pbxuser
