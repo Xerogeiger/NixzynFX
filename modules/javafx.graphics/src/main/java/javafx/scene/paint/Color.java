@@ -770,6 +770,16 @@ public final class Color extends Paint implements Interpolatable<Color> {
     }
 
     /**
+     * Creates a new color with a new opacity
+     *
+     * @param opacity the opacity of the new color
+     * @return the new color with the changed opacity
+     */
+    public Color opacity(double opacity) {
+        return new Color(this.red, this.green, this.blue, opacity);
+    }
+
+    /**
      * Creates a new Color that is grayscale equivalent of this Color.
      * Opacity is preserved.
      * @return a Color that is grayscale equivalent of this Color
