@@ -720,6 +720,27 @@ public class Image {
      * Constructs a new {@code Image} with the specified parameters.
      *
      * @param is the stream from which to load the image
+     * @param path the stored path for the image
+     * @param requestedWidth the image's bounding box width
+     * @param requestedHeight the image's bounding box height
+     * @param preserveRatio indicates whether to preserve the aspect ratio of
+     *      the original image when scaling to fit the image within the
+     *      specified bounding box
+     * @param smooth indicates whether to use a better quality filtering
+     *      algorithm or a faster one when scaling this image to fit within
+     *      the specified bounding box
+     * @throws NullPointerException if input stream is null
+     */
+    public Image(@NamedArg("is") InputStream is, @NamedArg("path") String path, @NamedArg("requestedWidth") double requestedWidth, @NamedArg("requestedHeight") double requestedHeight,
+                 @NamedArg("preserveRatio") boolean preserveRatio, @NamedArg("smooth") boolean smooth) {
+        this(path, validateInputStream(is), requestedWidth, requestedHeight, preserveRatio, smooth, false);
+        initialize(null);
+    }
+
+    /**
+     * Constructs a new {@code Image} with the specified parameters.
+     *
+     * @param is the stream from which to load the image
      * @param requestedWidth the image's bounding box width
      * @param requestedHeight the image's bounding box height
      * @param preserveRatio indicates whether to preserve the aspect ratio of
