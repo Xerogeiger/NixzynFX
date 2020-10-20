@@ -1168,6 +1168,60 @@ public class VirtualFlowTest {
     public void testScrollOneCellHorizontal() {
         assertLastCellInsideViewport(false);
     }
+
+    @Test
+    // see JDK-8178297
+    public void testPositionCellRemainsConstant() {
+        flow.setVertical(true);
+        flow.setCellCount(20);
+        flow.resize(300, 300);
+        flow.scrollPixels(10);
+        pulse();
+
+        IndexedCell vc = flow.getCell(0);
+        double cellPosition = flow.getCellPosition(vc);
+        assertEquals("Wrong first cell position", -10d, cellPosition, 0d);
+
+        for (int i = 1; i < 10; i++) {
+            flow.setCellCount(20 + i);
+            pulse();
+            vc = flow.getCell(0);
+            cellPosition = flow.getCellPosition(vc);
+            assertEquals("Wrong first cell position after inserting " + i + " cells", -10d, cellPosition, 0d);
+        }
+    }
+
+    @Test
+    // see JDK-8252811
+    public void testSheetChildrenRemainsConstant() {
+        flow.setVertical(true);
+        flow.setCellCount(20);
+        flow.resize(300, 300);
+        pulse();
+
+        int sheetChildrenSize = flow.sheetChildren.size();
+        assertEquals("Wrong number of sheet children", 12, sheetChildrenSize);
+
+        for (int i = 1; i < 50; i++) {
+            flow.setCellCount(20 + i);
+            pulse();
+            sheetChildrenSize = flow.sheetChildren.size();
+            assertEquals("Wrong number of sheet children after inserting " + i + " items", 12, sheetChildrenSize);
+        }
+
+        for (int i = 1; i < 50; i++) {
+            flow.setCellCount(70 - i);
+            pulse();
+            sheetChildrenSize = flow.sheetChildren.size();
+            assertEquals("Wrong number of sheet children after removing " + i + " items", 12, sheetChildrenSize);
+        }
+
+        flow.setCellCount(0);
+        pulse();
+        sheetChildrenSize = flow.sheetChildren.size();
+        assertEquals("Wrong number of sheet children after removing all items", 12, sheetChildrenSize);
+    }
+
 }
 
 class CellStub extends IndexedCellShim {

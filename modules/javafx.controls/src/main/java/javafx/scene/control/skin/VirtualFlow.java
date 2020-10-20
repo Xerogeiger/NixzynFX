@@ -836,12 +836,6 @@ public class VirtualFlow<T extends IndexedCell> extends Region {
             if (countChanged) {
                 layoutChildren();
 
-                // Fix for RT-13965: Without this line of code, the number of items in
-                // the sheet would constantly grow, leaking memory for the life of the
-                // application. This was especially apparent when the total number of
-                // cells changes - regardless of whether it became bigger or smaller.
-                sheetChildren.clear();
-
                 Parent parent = getParent();
                 if (parent != null) parent.requestLayout();
             }
@@ -1899,9 +1893,9 @@ public class VirtualFlow<T extends IndexedCell> extends Region {
     private void positionCell(T cell, double position) {
         if (isVertical()) {
             cell.setLayoutX(0);
-            cell.setLayoutY(snapSizeY(position));
+            cell.setLayoutY(snapSpaceY(position));
         } else {
-            cell.setLayoutX(snapSizeX(position));
+            cell.setLayoutX(snapSpaceX(position));
             cell.setLayoutY(0);
         }
     }
