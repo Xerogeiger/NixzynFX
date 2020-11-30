@@ -17,7 +17,6 @@ public class SizeToScreen {
     public static double getWidth() {
         return SCREEN_BOUNDS.getWidth();
     }
-
     public static double getHeight() {
         return SCREEN_BOUNDS.getHeight();
     }
