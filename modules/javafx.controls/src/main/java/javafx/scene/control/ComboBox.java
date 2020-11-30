@@ -40,6 +40,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.AccessibleAttribute;
 import javafx.scene.AccessibleRole;
 import javafx.scene.Node;
+import javafx.scene.text.Font;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 
@@ -350,6 +351,11 @@ public class ComboBox<T> extends ComboBoxBase<T> {
     public final void setButtonCell(ListCell<T> value) { buttonCellProperty().set(value); }
     public final ListCell<T> getButtonCell() {return buttonCellProperty().get(); }
 
+    public ObjectProperty<Font> fontProperty() { return font; }
+    public ObjectProperty<Font> font =
+            new SimpleObjectProperty<>(this, "font", Font.getDefault());
+    public final void setFont(Font value) { font.set(value == null? Font.getDefault(): value); }
+    public final Font getFont() { return font.get(); }
 
     // --- Selection Model
     /**

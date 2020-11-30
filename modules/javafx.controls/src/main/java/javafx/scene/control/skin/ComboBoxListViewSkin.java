@@ -490,12 +490,15 @@ public class ComboBoxListViewSkin<T> extends ComboBoxPopupControl<T> {
     private Callback<ListView<T>, ListCell<T>> getDefaultCellFactory() {
         return new Callback<ListView<T>, ListCell<T>>() {
             @Override public ListCell<T> call(ListView<T> listView) {
-                return new ListCell<T>() {
+                ListCell<T> cell = new ListCell<>() {
                     @Override public void updateItem(T item, boolean empty) {
                         super.updateItem(item, empty);
                         updateDisplayText(this, item, empty);
                     }
                 };
+
+                cell.fontProperty().bind(comboBox.fontProperty());
+                return cell;
             }
         };
     }
