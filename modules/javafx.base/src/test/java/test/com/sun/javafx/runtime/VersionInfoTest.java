@@ -131,21 +131,4 @@ public class VersionInfoTest {
             assertFalse("internal".equals(v.suffix));
         }
     }
-
-    @Test
-    public void testNonPublic() {
-        String runtimeVersion = VersionInfo.getRuntimeVersion();
-        Version v = new Version(runtimeVersion);
-        String milestone = VersionInfo.getReleaseMilestone();
-        String timestamp = VersionInfo.getBuildTimestamp();
-        String hudsonJob = VersionInfo.getHudsonJobName();
-        assertEquals(milestone, v.suffix);
-        if (hudsonJob.length() == 0) {
-            assertEquals(timestamp, v.opt);
-            assertEquals("internal", v.suffix);
-        } else {
-            assertFalse("internal".equals(v.suffix));
-        }
-    }
-
 }
