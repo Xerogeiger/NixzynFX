@@ -296,7 +296,7 @@ ext.IS_MAC = OS_NAME.contains("mac") || OS_NAME.contains("darwin")
 ext.IS_WINDOWS = OS_NAME.contains("windows")
 ext.IS_LINUX = OS_NAME.contains("linux")
 
-ext.MAVEN_GROUP_ID = "org.openjfx"
+ext.MAVEN_GROUP_ID = "com.nixzyn"
 
 // Verify that the architecture & OS are supported configurations. Note that
 // at present building on PI is not supported, but we would only need to make
@@ -454,7 +454,7 @@ ext.IS_DEBUG_JAVA = CONF == "Debug" || CONF == "DebugNative"
 ext.IS_DEBUG_NATIVE = CONF == "DebugNative"
 
 // Specifies whether to enable the Maven publishing tasks
-defineProperty("MAVEN_PUBLISH", "false")
+defineProperty("MAVEN_PUBLISH", "true")
 ext.IS_MAVEN_PUBLISH = Boolean.parseBoolean(MAVEN_PUBLISH)
 
 // Defines the compiler warning levels to use. If empty, then no warnings are generated. If
@@ -508,7 +508,7 @@ if (IS_MAC) {
 defineProperty("HUDSON_JOB_NAME", "not_hudson")
 defineProperty("HUDSON_BUILD_NUMBER","0000")
 defineProperty("PROMOTED_BUILD_NUMBER", "0")
-defineProperty("MILESTONE_FCS", "false")
+defineProperty("MILESTONE_FCS", "true")
 ext.IS_MILESTONE_FCS = Boolean.parseBoolean(MILESTONE_FCS)
 
 // The following properties define the product name for Oracle JDK and OpenJDK
@@ -549,7 +549,7 @@ defineProperty("BUILD_TIMESTAMP", buildTimestamp)
 def relSuffix = ""
 def relOpt = ""
 if (HUDSON_JOB_NAME == "not_hudson") {
-    relSuffix = "-internal"
+    relSuffix = "-ea"
     relOpt = "-${buildTimestamp}"
 } else {
     relSuffix = IS_MILESTONE_FCS ? "" : jfxReleaseSuffix
@@ -4365,8 +4365,8 @@ configurations {
 if (IS_STUB_RUNTIME_OPENJFX) {
     def String platform = IS_MAC ? "mac" : IS_WINDOWS ? "win" : IS_LINUX ? "linux" : ""
     dependencies {
-        openjfxStubs "org.openjfx:javafx-media:$STUB_RUNTIME_OPENJFX:$platform@jar"
-        openjfxStubs "org.openjfx:javafx-web:$STUB_RUNTIME_OPENJFX:$platform@jar"
+        openjfxStubs "com.nixzyn:javafx-media:$STUB_RUNTIME_OPENJFX:$platform@jar"
+        openjfxStubs "com.nixzyn:javafx-web:$STUB_RUNTIME_OPENJFX:$platform@jar"
     }
 }
 
@@ -4923,7 +4923,7 @@ compileTargets { t ->
                 javafxProperties.delete()
                 javafxProperties << "javafx.version=$RELEASE_VERSION_SHORT";
                 javafxProperties << "\n"
-                javafxProperties << "javafx.runtime.version=$RELEASE_VERSION_LONG";
+                javafxProperties << "javafx.runtime.version=$RELEASE_VERSION_SHORT";
                 javafxProperties << "\n"
                 javafxProperties << "javafx.runtime.build=$PROMOTED_BUILD_NUMBER";
                 javafxProperties << "\n"
