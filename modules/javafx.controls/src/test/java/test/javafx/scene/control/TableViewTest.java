@@ -32,6 +32,8 @@ import static javafx.collections.FXCollections.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 
@@ -40,6 +42,9 @@ import com.sun.javafx.scene.control.SelectedCellsMap;
 import com.sun.javafx.scene.control.TableColumnBaseHelper;
 import com.sun.javafx.scene.control.behavior.TableCellBehavior;
 import javafx.beans.InvalidationListener;
+import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
+import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import test.com.sun.javafx.scene.control.infrastructure.ControlTestUtils;
 import test.com.sun.javafx.scene.control.infrastructure.KeyEventFirer;
@@ -4650,17 +4655,14 @@ public class TableViewTest {
         assertEquals(0, listOne.size());
         assertEquals(0, listTwo.size());
 
-        System.out.println("Test One:");
         listTwo.setAll("a", "b", "c", "d");
         assertEquals(4, listOne.size());
         assertEquals(4, listTwo.size());
 
-        System.out.println("\nTest Two:");
         listTwo.setAll("e", "f", "g", "h");
         assertEquals(4, listOne.size());
         assertEquals(4, listTwo.size());
 
-        System.out.println("\nTest Three:");
         listTwo.setAll("i", "j", "k", "l");
         assertEquals(4, listOne.size());
         assertEquals(4, listTwo.size());
@@ -4678,7 +4680,8 @@ public class TableViewTest {
         TableView.TableViewSelectionModel<String> sm = stringTableView.getSelectionModel();
         sm.setSelectionMode(SelectionMode.MULTIPLE);
 
-        sm.getSelectedItems().addListener((ListChangeListener<String>) change -> {
+        // Enable below prints for debug if needed
+        /*sm.getSelectedItems().addListener((ListChangeListener<String>) change -> {
             while (change.next()) {
                 System.out.println("sm.getSelectedItems(): " + change.getList());
             }
@@ -4688,7 +4691,7 @@ public class TableViewTest {
             while (change.next()) {
                 System.out.println("rt_39482_list: " + change.getList());
             }
-        });
+        });*/
 
         Bindings.bindContent(rt_39482_list, sm.getSelectedItems());
 
@@ -4705,7 +4708,6 @@ public class TableViewTest {
                                          TableView.TableViewSelectionModel<String> sm,
                                          int rowToSelect,
                                          TableColumn<String,String> columnToSelect) {
-        System.out.println("\nSelect row " + rowToSelect);
         sm.selectAll();
         assertEquals(4, sm.getSelectedCells().size());
         assertEquals(4, sm.getSelectedIndices().size());
@@ -5207,7 +5209,7 @@ public class TableViewTest {
             // number of items selected
             c.reset();
             c.next();
-            System.out.println("Added items: " + c.getAddedSubList());
+            //System.out.println("Added items: " + c.getAddedSubList());
             assertEquals(indices.length, c.getAddedSize());
             assertArrayEquals(indices, c.getAddedSubList().stream().mapToInt(i -> i).toArray());
         };
@@ -5472,6 +5474,57 @@ public class TableViewTest {
 
         // for the child header, we expect [column-header table-column child]
         assertArrayEquals(new String[] {"column-header", "table-column", "child"}, childHeader.getStyleClass().toArray());
+
+        sl.dispose();
+    }
+
+    // see JDK-8177945
+    @Test
+    public void test_addingNewItemsDoesNotChangePseudoClassSelectedState() {
+        TableColumn firstNameCol = new TableColumn("First Name");
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
+
+        TableView<Person> table = new TableView<>();
+        table.setItems(personTestData);
+        table.getColumns().add(firstNameCol);
+
+        sm = table.getSelectionModel();
+        sm.setCellSelectionEnabled(true);
+
+        StageLoader sl = new StageLoader(table);
+
+        table.scrollTo(3);
+        sm.select(3);
+
+        Toolkit.getToolkit().firePulse();
+
+        assertEquals(1, sm.getSelectedCells().size());
+
+        IndexedCell cell = VirtualFlowTestUtils.getCell(table, 3, 0);
+        assertTrue(cell.isSelected());
+
+        ObservableSet<PseudoClass> pseudoClassStates = cell.getPseudoClassStates();
+        String selectedState = "selected";
+        assertTrue(pseudoClassStates.stream().anyMatch(p -> selectedState.equals(p.getPseudoClassName())));
+
+        AtomicInteger counter = new AtomicInteger();
+        AtomicBoolean selected = new AtomicBoolean(true);
+        pseudoClassStates.addListener((SetChangeListener<PseudoClass>) change -> {
+            if (selected.get() && pseudoClassStates.stream().noneMatch(p -> selectedState.equals(p.getPseudoClassName()))) {
+                counter.incrementAndGet(); // deselected
+                selected.set(false);
+            } else if (!selected.get() && pseudoClassStates.stream().anyMatch(p -> selectedState.equals(p.getPseudoClassName()))) {
+                counter.incrementAndGet(); // selected
+                selected.set(true);
+            }
+        });
+
+        Toolkit.getToolkit().firePulse();
+        for (int i = 0; i < 10; i++) {
+            table.getItems().add(new Person("Test", i));
+            Toolkit.getToolkit().firePulse();
+            assertEquals(0, counter.get());
+        }
 
         sl.dispose();
     }
