@@ -47,7 +47,7 @@ public class ObservableListWrapper<E> extends ModifiableObservableListBase<E> im
 
     private final List<E> backingList;
 
-    private final ElementObserver elementObserver;
+    private final ElementObserver<E> elementObserver;
 
     public ObservableListWrapper(List<E> list) {
         backingList = list;
@@ -56,7 +56,7 @@ public class ObservableListWrapper<E> extends ModifiableObservableListBase<E> im
 
     public ObservableListWrapper(List<E> list, Callback<E, Observable[]> extractor) {
         backingList = list;
-        this.elementObserver = new ElementObserver(extractor, new Callback<E, InvalidationListener>() {
+        this.elementObserver = new ElementObserver<>(extractor, new Callback<E, InvalidationListener>() {
 
             @Override
             public InvalidationListener call(final E e) {
