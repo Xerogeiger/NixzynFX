@@ -8430,18 +8430,18 @@ public abstract class Node implements EventTarget, Styleable {
     private boolean treeShowing;
     private TreeShowingPropertyReadOnly treeShowingRO;
 
-    final void setTreeShowing(boolean value) {
+    public final void setTreeShowing(boolean value) {
         if (treeShowing != value) {
             treeShowing = value;
             ((TreeShowingPropertyReadOnly) treeShowingProperty()).invalidate();
         }
     }
 
-    final boolean isTreeShowing() {
+    public final boolean isTreeShowing() {
         return treeShowingProperty().get();
     }
 
-    final BooleanExpression treeShowingProperty() {
+    public final BooleanExpression treeShowingProperty() {
         if (treeShowingRO == null) {
             treeShowingRO = new TreeShowingPropertyReadOnly();
         }
