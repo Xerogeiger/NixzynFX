@@ -44,6 +44,7 @@ module javafx.base {
     exports javafx.event;
     exports javafx.util;
     exports javafx.util.converter;
+    exports com.sun.javafx.collections;
 
     exports com.sun.javafx to
         javafx.controls,
@@ -58,11 +59,6 @@ module javafx.base {
     exports com.sun.javafx.binding to
         javafx.controls,
         javafx.graphics;
-    exports com.sun.javafx.collections to
-        javafx.controls,
-        javafx.graphics,
-        javafx.media,
-        javafx.swing;
     exports com.sun.javafx.event to
         javafx.controls,
         javafx.graphics;
